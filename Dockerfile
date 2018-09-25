@@ -1,6 +1,6 @@
 FROM python:3.7-slim-stretch
 
-WORKDIR /opt/confreg/
+WORKDIR /opt/confsched/
 
 ENV PYTHONUNBUFFERED 1
 

@@ -27,8 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'scheduler'
+    'scheduler',
+    'user',
 ]
+
+AUTH_USER_MODEL='user.ConfSchedUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
