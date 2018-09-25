@@ -1,0 +1,24 @@
+version: '3'
+
+volumes:
+  postgres_data: {}
+
+services:
+
+  django:
+    build: .
+    image: confsched_django
+    depends_on:
+      - postgres
+    env_file:
+      - .env/django.env
+      - .env/postgres.env
+    ports:
+      - 8000:8000
+
+  postgres:
+    image: postgres:10.5
+    env_file:
+      - .env/postgres.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
