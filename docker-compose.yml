@@ -22,5 +22,7 @@ services:
     image: postgres:10.5
     env_file:
       - .env/postgres.env
+    ports:
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
