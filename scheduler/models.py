@@ -6,7 +6,11 @@ import pytz
 
 
 def validate_timezone(timezone):
-    return timezone in pytz.all_timezones
+    if timezone not in pytz.all_timezones:
+        raise ValidationError(
+            f"{timezone} is not a valid timezone string. "
+            "Please use a string like 'Europe/Berlin'"
+        )
 
 
 class Event(models.Model):
@@ -17,6 +21,10 @@ class Event(models.Model):
             validate_timezone
         ]
     )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Staffer(models.Model):
