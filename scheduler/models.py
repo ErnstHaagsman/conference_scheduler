@@ -4,8 +4,10 @@ from django.db import models
 from django.conf import settings
 import pytz
 
+
 def validate_timezone(timezone):
     return timezone in pytz.all_timezones
+
 
 class Event(models.Model):
     name = models.CharField(max_length=300)
@@ -15,6 +17,7 @@ class Event(models.Model):
             validate_timezone
         ]
     )
+
 
 class Staffer(models.Model):
     user = models.ForeignKey(
@@ -26,12 +29,14 @@ class Staffer(models.Model):
         on_delete=models.CASCADE
     )
 
+
 class Availability(models.Model):
     staffer = models.ForeignKey(
         Staffer,
         on_delete=models.CASCADE
     )
     time = DateTimeRangeField()
+
 
 class ExpoDay(models.Model):
     event = models.ForeignKey(
@@ -40,6 +45,7 @@ class ExpoDay(models.Model):
     )
     expo_time = DateTimeRangeField()
     lunch_time = DateTimeRangeField()
+
 
 class ExpoDemand(models.Model):
     day = models.ForeignKey(
@@ -51,6 +57,7 @@ class ExpoDemand(models.Model):
     )
     time = DateTimeRangeField()
 
+
 class TalkLocation(models.Model):
     event = models.ForeignKey(
         Event,
@@ -60,6 +67,7 @@ class TalkLocation(models.Model):
     travel_distance = models.IntegerField(
         "The time to travel from the booth to/from this location, in minutes"
     )
+
 
 class TalkRequest(models.Model):
     staffer = models.ForeignKey(
@@ -75,6 +83,7 @@ class TalkRequest(models.Model):
     priority = models.IntegerField(
         "Lowest number has the highest priority. Only the rank matters."
     )
+
 
 class ScheduleEntry(models.Model):
     TALK = 'TALK'
