@@ -26,6 +26,9 @@ class Event(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 
 class Staffer(models.Model):
     user = models.ForeignKey(
@@ -37,6 +40,9 @@ class Staffer(models.Model):
         on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return f"{self.user.get_full_name()} at {self.event.name}"
+
 
 class Availability(models.Model):
     staffer = models.ForeignKey(
@@ -44,6 +50,10 @@ class Availability(models.Model):
         on_delete=models.CASCADE
     )
     time = DateTimeRangeField()
+
+    class Meta:
+        verbose_name = 'Availability'
+        verbose_name_plural = 'Availability'
 
 
 class ExpoDay(models.Model):
@@ -76,6 +86,9 @@ class TalkLocation(models.Model):
         "The time to travel from the booth to/from this location, in minutes"
     )
 
+    def __str__(self):
+        return self.name
+
 
 class TalkRequest(models.Model):
     staffer = models.ForeignKey(
@@ -91,6 +104,9 @@ class TalkRequest(models.Model):
     priority = models.IntegerField(
         "Lowest number has the highest priority. Only the rank matters."
     )
+
+    def __str__(self):
+        return self.name
 
 
 class ScheduleEntry(models.Model):
