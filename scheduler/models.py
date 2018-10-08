@@ -64,6 +64,11 @@ class ExpoDay(models.Model):
     expo_time = DateTimeRangeField()
     lunch_time = DateTimeRangeField()
 
+    def __str__(self):
+        tz = pytz.timezone(self.event.timezone)
+        local_date = self.expo_time.lower.astimezone(tz)
+        return local_date.strftime('%b %d')
+
 
 class ExpoDemand(models.Model):
     day = models.ForeignKey(
