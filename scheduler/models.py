@@ -62,7 +62,10 @@ class ExpoDay(models.Model):
         on_delete=models.CASCADE
     )
     expo_time = DateTimeRangeField()
-    lunch_time = DateTimeRangeField()
+    lunch_time = DateTimeRangeField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         tz = pytz.timezone(self.event.timezone)
