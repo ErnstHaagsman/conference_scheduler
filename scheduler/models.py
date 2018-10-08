@@ -40,6 +40,9 @@ class Staffer(models.Model):
         on_delete=models.CASCADE
     )
 
+    class Meta:
+        unique_together = ("user", "event")
+
     def __str__(self):
         return f"{self.user.get_full_name()} at {self.event.name}"
 
