@@ -66,8 +66,7 @@ class EventAdmin(admin.ModelAdmin):
             get_inline_formsets(request, formsets, inline_instances, obj)
 
     def save_formset(self, request, form, formset, change):
-        # Activate the event's timezone to ensure inline forms gets stored
-        # with the correct timezone
+        # Override the timezone on all time ranges to be in the event timezone
         tz = form.cleaned_data['timezone']
         instances = formset.save(commit=False)
         for instance in instances:
