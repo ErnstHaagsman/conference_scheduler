@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from scheduler.views import TalkListView
+
 urlpatterns = [
+    path('<slug:event_slug>/talks/', TalkListView.as_view(), name='talk_list'),
     path('admin/', admin.site.urls),
 ]

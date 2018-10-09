@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conference Scheduler</title>
+
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+</head>
+<body>
+
+    <div class="header">
+        <h1>{% block title %}Conference Scheduler{% endblock %}</h1>
+        <div class="profile">
+            <p>Logged in as {{ user.first_name }}</p>
+            <div class="profile_actions">
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper">
+    {% block main %}
+
+    {% endblock %}
+    </div>
+
+</body>
+</html>

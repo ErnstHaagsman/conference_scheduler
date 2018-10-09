@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Talks at {{ event.name }}{% endblock %}
+
+{% block main %}
+
+    <p>These are the talks you've currently requested at {{ event.name }}.
+    Use the arrows to indicate which talks you'd like to see more.</p>
+
+    <a href="" class="button">Request Another Talk</a>
+
+    <ul>
+    {% for talk in talk_requests %}
+        <li>
+            <div class="arrows">
+                <span class="up">Up</span>
+                <span class="down">Down</span>
+            </div>
+            <div class="status"></div>
+            <div class="contents">
+                <h2>{{ talk.name }}</h2>
+                <p>{{ talk.location }}</p>
+                <p class="date">{{ talk.date }}</p>
+                <p class="time">{{ talk.timeslot }}</p>
+            </div>
+            <div class="actions">
+                <span class="delete">Delete</span>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
