@@ -4,27 +4,30 @@
 
 {% block main %}
 
-    <p>These are the talks you've currently requested at {{ event.name }}.
-    Use the arrows to indicate which talks you'd like to see more.</p>
+    <h3>These are the talks you've currently requested at {{ event.name }}.
+    Use the arrows to prioritize your requests.</h3>
 
     <a href="" class="button">Request Another Talk</a>
 
-    <ul>
+    <ul class="talklist">
     {% for talk in talk_requests %}
         <li>
             <div class="arrows">
-                <span class="up">Up</span>
-                <span class="down">Down</span>
+                <a href="#"><i class="up fas fa-caret-up fa-2x"></i></a>
+                <a href="#"><i class="down fas fa-caret-down fa-2x"></i></a>
             </div>
-            <div class="status"></div>
+            <div class="status status-pending"></div>
             <div class="contents">
-                <h2>{{ talk.name }}</h2>
-                <p>{{ talk.location }}</p>
-                <p class="date">{{ talk.date }}</p>
-                <p class="time">{{ talk.timeslot }}</p>
+                <h3>{{ talk.name }}</h3>
+                <p>{{ talk.talk_location.name }}</p>
+                <div class="datetime">
+                    <p class="date">{{ talk.time.lower | date:'F d'}}</p>
+                    <p class="time">{{ talk.time.lower | date:'g:iA' | lower }} -
+                        {{ talk.time.upper | date:'g:iA' | lower }}</p>
+                </div>
             </div>
             <div class="actions">
-                <span class="delete">Delete</span>
+                <a href="#"><i class="fas fa-trash fa-lg"></i></a>
             </div>
         </li>
     {% endfor %}

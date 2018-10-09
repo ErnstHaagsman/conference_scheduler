@@ -1,0 +1,126 @@
+.wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    margin-bottom: 1em;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    margin-bottom: 70px;
+    border-bottom: 2px solid #333;
+}
+
+.header h1 {
+    flex-grow: 1;
+}
+
+span.username {
+    font-weight: bold;
+}
+
+.profile_actions {
+    text-align: right;
+}
+
+a.button {
+    display: block;
+    min-width: 100px;
+    max-width: 250px;
+    margin: 10px 0;
+    padding: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    color: #FFF;
+    background-color: #333;
+}
+
+.talklist {
+    margin-top: 2em;
+}
+
+.talklist a {
+    color: inherit;
+}
+
+.talklist li {
+    display: flex;
+    max-width: 800px;
+    min-height: 100px;
+    margin: 20px auto;
+    border: 1px solid #333;
+    padding: 0.5em;
+}
+
+.talklist .arrows {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-right: 0.5em;
+}
+
+/*
+
+    First and last talk don't need to move out of bounds
+
+ */
+
+.talklist li:first-child .arrows {
+    justify-content: flex-end;
+}
+
+.talklist li:first-child .up {
+    display: none;
+}
+
+.talklist li:last-child .down {
+    display: none;
+}
+
+.talklist .contents {
+    flex-grow: 1;
+    padding: 0 1em;
+}
+
+.talklist .datetime {
+    margin-top: 0.5em;
+    display: flex;
+}
+
+.talklist .datetime p {
+    flex-basis: 125px;
+}
+
+.talklist .time {
+    flex-grow: 1;
+}
+
+.status {
+    align-self: stretch;
+    width: 2em;
+}
+
+.status-pending {
+    background-color: #333;
+}
