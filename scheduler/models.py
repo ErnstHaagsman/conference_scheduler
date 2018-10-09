@@ -15,6 +15,7 @@ def validate_timezone(timezone):
 
 class Event(models.Model):
     name = models.CharField(max_length=300)
+    slug = models.CharField(max_length=100, db_index=True, unique=True)
     timezone = models.CharField(
         max_length=100,
         validators=[
