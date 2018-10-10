@@ -1,16 +1,25 @@
+from datetime import datetime
+
+import pytz
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 from django.views import View
+from psycopg2._range import DateTimeTZRange
 
-from scheduler.models import TalkRequest, Event
+from scheduler.forms.forms import TalkAddForm
+from scheduler.models import TalkRequest, Event, TalkLocation, Staffer
+from scheduler.util import force_tz
 
 
 class TalkListView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         event_slug = kwargs['event_slug']
         event = get_object_or_404(Event, slug=event_slug)
+
+        timezone.activate(event.timezone)
 
         talk_requests = TalkRequest.objects\
             .filter(staffer__user=request.user,
@@ -75,3 +84,53 @@ class TalkDeleteView(LoginRequiredMixin, View):
                 to_move.save()
 
         return redirect('talk_list', event_slug)
+
+
+class TalkAddView(LoginRequiredMixin, View):
+    def get(self, request, **kwargs):
+        event_slug = kwargs['event_slug']
+
+        event = Event.objects.get(slug=event_slug)
+        locations = TalkLocation.objects.filter(event__slug=event_slug)
+        form = TalkAddForm(locations=locations)
+
+        return render(request, 'scheduler/add_talk.html', {
+            'event': event,
+            'form': form
+        })
+
+    def post(self, request, **kwargs):
+        event_slug = kwargs['event_slug']
+
+        event = Event.objects.get(slug=event_slug)
+        locations = TalkLocation.objects.filter(event__slug=event_slug)
+
+        form = TalkAddForm(request.POST, locations=locations)
+
+        if form.is_valid():
+            tr = TalkRequest()
+            tr.staffer = Staffer.objects.get(user=request.user)
+            tr.name = form.cleaned_data['talk_name']
+            tr.talk_location = form.cleaned_data['talk_location']
+
+            # Set the priority of the new talk, to the count of requests + 1
+            count = TalkRequest.objects.filter(staffer=tr.staffer).count()
+            tr.priority = count + 1
+
+            # Construct the time range
+            tz = pytz.timezone(event.timezone)
+            lower = tz.localize(datetime.combine(form.cleaned_data['talk_date'],
+                                                 form.cleaned_data['talk_start']))
+            upper = tz.localize(datetime.combine(form.cleaned_data['talk_date'],
+                                                 form.cleaned_data['talk_end']))
+
+            tr.time = DateTimeTZRange(lower=lower, upper=upper)
+
+            tr.save()
+
+            return redirect('talk_list', event_slug)
+
+        return render(request, 'scheduler/add_talk.html', {
+            'event': event,
+            'form': form
+        })

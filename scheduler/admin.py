@@ -1,9 +1,9 @@
-import pytz
 from django.contrib import admin
 from django.utils import timezone
 from psycopg2.extras import DateTimeTZRange
 
 from scheduler.models import Event, Staffer, Availability, ExpoDay, ExpoDemand, TalkLocation, TalkRequest
+from scheduler.util import force_tz
 
 
 class TalkRequestInline(admin.StackedInline):
@@ -20,11 +20,6 @@ class StafferAdmin(admin.ModelAdmin):
         TalkRequestInline,
         AvailabilityInline
     ]
-
-
-def force_tz(date, tz):
-    naive_date = date.replace(tzinfo=None)
-    return pytz.timezone(tz).localize(naive_date)
 
 
 def range_force_tz(time_range, tz):
