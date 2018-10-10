@@ -14,11 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
 
-from scheduler.views import TalkListView
+from scheduler.views import TalkListView, TalkReprioritizeView, TalkDeleteView
 
 urlpatterns = [
     path('<slug:event_slug>/talks/', TalkListView.as_view(), name='talk_list'),
+    re_path(
+        '(?P<event_slug>\w+)/talks/(?P<talk_id>\d+)/(?P<direction>up|down)',
+        TalkReprioritizeView.as_view(),
+        name='talk_reprioritize'),
+    path('<slug:event_slug>/talks/<int:talk_id>/delete', TalkDeleteView.as_view(), name='talk_delete'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

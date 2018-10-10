@@ -13,8 +13,14 @@
     {% for talk in talk_requests %}
         <li>
             <div class="arrows">
-                <a href="#"><i class="up fas fa-caret-up fa-2x"></i></a>
-                <a href="#"><i class="down fas fa-caret-down fa-2x"></i></a>
+                <form method="post" action="{% url 'talk_reprioritize' event.slug talk.id 'up' %}">
+                {% csrf_token %}
+                <button type="submit"><i class="up fas fa-caret-up fa-2x"></i></button>
+                </form>
+                <form method="post" action="{% url 'talk_reprioritize' event.slug talk.id 'down' %}">
+                {% csrf_token %}
+                <button type="submit"><i class="down fas fa-caret-down fa-2x"></i></button>
+                </form>
             </div>
             <div class="status status-pending"></div>
             <div class="contents">
@@ -27,7 +33,10 @@
                 </div>
             </div>
             <div class="actions">
-                <a href="#"><i class="fas fa-trash fa-lg"></i></a>
+                <form method="post" action="{% url 'talk_delete' event.slug talk.id %}">
+                {% csrf_token %}
+                <button type="submit"><i class="fas fa-trash fa-lg"></i></button>
+                </form>
             </div>
         </li>
     {% endfor %}
