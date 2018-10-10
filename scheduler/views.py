@@ -10,9 +10,10 @@ class TalkListView(LoginRequiredMixin, View):
         event_slug = kwargs['event_slug']
         event = get_object_or_404(Event, slug=event_slug)
 
-
-        talk_requests = TalkRequest.objects.filter(staffer__user=request.user,
-                                                   staffer__event=event)
+        talk_requests = TalkRequest.objects\
+            .filter(staffer__user=request.user,
+                    staffer__event=event) \
+            .order_by('priority')
 
 
 
