@@ -14,12 +14,14 @@
     <div class="wrapper">
     <div class="header">
         <h1>{% block title %}Conference Scheduler{% endblock %}</h1>
+        {% if user.is_authenticated %}
         <div class="profile">
             <p>Logged in as <span class="username">{{ user.first_name }}</span></p>
             <div class="profile_actions">
                 <a href="{% url 'logout' %}">Logout</a>
             </div>
         </div>
+        {% endif %}
     </div>
 
     <div class="contents">

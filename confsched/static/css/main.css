@@ -125,3 +125,22 @@ span.username {
 .status-pending {
     background-color: #333;
 }
+
+.djform {
+    width: 80%;
+    padding-left: 5%;
+}
+
+.djform td, .djform th {
+    padding: 5px 0;
+}
+
+.djform th {
+    text-align: left;
+    width: 150px;
+}
+
+.djform #id_username {
+    /* Usernames are email addresses, so length is needed */
+    width: 250px;
+}
