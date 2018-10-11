@@ -8,6 +8,14 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+p {
+    line-height: 1.4em;
+}
+
+a, a:visited {
+    color: royalblue;
+}
+
 h1 {
     font-size: 3em;
     font-weight: bold;
@@ -44,7 +52,11 @@ span.username {
     text-align: right;
 }
 
-.button {
+.button, a.button {
+    /*
+        a.button is necessary, in Firefox at least, to get it to
+        show up white.
+     */
     display: block;
     min-width: 100px;
     max-width: 250px;
@@ -140,7 +152,7 @@ span.username {
     width: 150px;
 }
 
-.djform #id_username {
+.djform #id_username, #id_email {
     /* Usernames are email addresses, so length is needed */
     width: 250px;
 }
