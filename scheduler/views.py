@@ -10,7 +10,7 @@ from django.views import View
 from psycopg2._range import DateTimeTZRange
 
 from scheduler.forms.forms import TalkAddForm
-from scheduler.models import TalkRequest, Event, TalkLocation, Staffer
+from scheduler.models import TalkRequest, Event, TalkLocation, Staffer, ExpoDay
 from scheduler.util import force_tz
 
 
@@ -117,8 +117,12 @@ class TalkAddView(LoginRequiredMixin, View):
         event_slug = kwargs['event_slug']
 
         event = Event.objects.get(slug=event_slug)
+        start_date = ExpoDay.objects.filter(event=event).order_by('expo_time')[0]
         locations = TalkLocation.objects.filter(event__slug=event_slug)
-        form = TalkAddForm(locations=locations)
+        form = TalkAddForm(locations=locations,
+                           initial={
+                               'talk_date': start_date.expo_time.lower
+                           })
 
         return render(request, 'scheduler/add_talk.html', {
             'event': event,
@@ -135,7 +139,8 @@ class TalkAddView(LoginRequiredMixin, View):
 
         if form.is_valid():
             tr = TalkRequest()
-            tr.staffer = Staffer.objects.get(user=request.user)
+            tr.staffer = Staffer.objects.get(user=request.user,
+                                             event__slug=event_slug)
             tr.name = form.cleaned_data['talk_name']
             tr.talk_location = form.cleaned_data['talk_location']
 

@@ -22,15 +22,18 @@ class TalkAddForm(forms.Form):
 
     talk_date = forms.DateField(
         label='Date',
-        required=True
+        required=True,
+        help_text='e.g. 2019-01-25'
     )
 
     talk_start = forms.TimeField(
         label='Begins',
-        required=True
+        required=True,
+        help_text='e.g. 13:00'
     )
 
     talk_end = forms.TimeField(
         label='Ends',
-        required=True
+        required=True,
+        help_text='e.g. 17:00'
     )

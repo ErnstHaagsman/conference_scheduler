@@ -144,3 +144,8 @@ span.username {
     /* Usernames are email addresses, so length is needed */
     width: 250px;
 }
+
+.helptext {
+    font-size: 0.8em;
+    color: #666;
+}

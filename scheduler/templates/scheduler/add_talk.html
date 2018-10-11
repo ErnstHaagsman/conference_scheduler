@@ -4,15 +4,26 @@
 
 {% block main %}
 
+    <style>
+        #id_talk_name {
+            width: 300px;
+        }
+    </style>
+
     <h3>Request to see a talk at {{ event.name }}.</h3>
 
-    <form action="{% url 'talk_add' event.slug %}" method="post">
+    <form action="{% url 'talk_add' event.slug %}" class="djform" method="post">
     {% csrf_token %}
     <table>
     {{ form.as_table }}
-    </table>
 
-    <button class="button" type="submit">Request Talk</button>
+    <tr>
+        <td></td>
+        <td>
+            <button class="button" type="submit">Request Talk</button>
+        </td>
+    </tr>
+    </table>
 
     </form>
 
