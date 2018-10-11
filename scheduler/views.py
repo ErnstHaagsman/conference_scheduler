@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytz
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import transaction
+from django.db import transaction, connection
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
@@ -12,6 +12,32 @@ from psycopg2._range import DateTimeTZRange
 from scheduler.forms.forms import TalkAddForm
 from scheduler.models import TalkRequest, Event, TalkLocation, Staffer
 from scheduler.util import force_tz
+
+
+class IndexView(LoginRequiredMixin, View):
+    def get(self, request, **kwargs):
+        # Get the user's next upcoming conference, and send them to the talk
+        # list for that conf
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                select
+                  se.slug
+                from scheduler_expoday
+                inner join scheduler_event se on scheduler_expoday.event_id = se.id
+                inner join scheduler_staffer staffer on se.id = staffer.event_id
+                where staffer.user_id = %s and expo_time && tstzrange(now(), 'infinity')
+                group by se.slug
+                order by min(lower(expo_time))
+                limit 1;
+            """, [request.user.id])
+
+            row = cursor.fetchone()
+
+        if row:
+            return redirect('talk_list', row[0])
+        else:
+            return render(request, 'scheduler/no_event.html', {})
 
 
 class TalkListView(LoginRequiredMixin, View):

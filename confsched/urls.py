@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from scheduler.views import TalkListView, TalkReprioritizeView, TalkDeleteView, TalkAddView
+from scheduler.views import TalkListView, TalkReprioritizeView, TalkDeleteView, TalkAddView, IndexView
 
 urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
     path('<slug:event_slug>/talks/', TalkListView.as_view(), name='talk_list'),
     path('<slug:event_slug>/talks/add', TalkAddView.as_view(), name='talk_add'),
     re_path(
