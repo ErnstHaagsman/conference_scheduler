@@ -54,7 +54,7 @@ class TalkListView(LoginRequiredMixin, View):
 
 
 
-        return render(request, 'scheduler/request_list.html', {
+        return render(request, 'scheduler/talk_list.html', {
             'event' : event,
             'talk_requests' : talk_requests
         })
