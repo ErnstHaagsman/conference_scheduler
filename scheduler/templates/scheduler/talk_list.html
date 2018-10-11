@@ -7,7 +7,7 @@
     <h3>These are the talks you've currently requested at {{ event.name }}.
     Use the arrows to prioritize your requests.</h3>
 
-    <a href="{% url 'talk_add' event.slug %}" class="button">Request Another Talk</a>
+    <a href="{% url 'talk_add' event.slug %}" class="button">Request a Talk</a>
 
     <ul class="talklist">
     {% for talk in talk_requests %}
