@@ -1,0 +1,13 @@
+Dear {{ user.first_name }},
+
+You're attending a conference soon as booth staff. If you'd also like to see
+some talks at this event, please register below and request the talks you'd
+like to see. The system will make a schedule to ensure that as many people
+as possible can see talks, while still making sure that the booth is staffed
+for the expected demand.
+
+<a href="{{ protocol}}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}">Create a password</a>
+
+If the link doesn't work, copy this into the address bar: {{ protocol}}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+
+Thank you so much for help!
