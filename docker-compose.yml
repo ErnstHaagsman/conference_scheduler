@@ -6,7 +6,7 @@ volumes:
 services:
 
   django:
-    build: .
+    build: ./src
     image: confsched_django
     depends_on:
       - postgres
@@ -16,7 +16,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - .:/opt/confsched/
+      - ./src:/opt/confsched/
 
   postgres:
     image: postgres:10.5
