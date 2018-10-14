@@ -1,0 +1,5 @@
+---
+- hosts: role_web
+  become: yes
+  roles:
+    - web

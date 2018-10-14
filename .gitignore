@@ -70,3 +70,8 @@ env.bak/
 venv.bak/
 
 .idea/
+
+*.tfstate
+*.backup
+*.retry
+.terraform/
