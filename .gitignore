@@ -75,3 +75,6 @@ venv.bak/
 *.backup
 *.retry
 .terraform/
+
+secrets.yml
+.vault_pass
