@@ -1,0 +1,74 @@
+- name: Create directory for application
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+
+- name: Copy application over
+  synchronize:
+    src: src/
+    dest:  "{{ app_dir }}"
+    group: no
+    owner: no
+    delete: yes
+
+- name: Set correct owner of application files
+  file:
+    path: "{{ app_dir }}"
+    recurse: yes
+    owner:  "{{ app_user }}"
+
+- name: Create directory for venv
+  file:
+    path:  "{{ venv_dir }}"
+    state: directory
+    owner:  "{{ app_user }}"
+
+
+- name: Install pip and libpq-dev (for psycopg2)
+  apt:
+    name:
+      - python3-pip
+      - libpq-dev
+    state: present
+
+- name: Install virtualenv and upgrade pip
+  pip:
+    name:
+      - pip
+      - virtualenv
+    state: latest
+
+- name: Install requirements
+  become: yes
+  become_user: "{{ app_user }}"
+  pip:
+    requirements: "{{ app_dir }}/requirements.prod.txt"
+    virtualenv: "{{ venv_dir }}"
+
+- name: Gunicorn service file
+  template:
+    src: gunicorn.service
+    dest: /etc/systemd/system/gunicorn.service
+
+- name: Gunicorn socket file
+  template:
+    src: gunicorn.socket
+    dest: /etc/systemd/system/gunicorn.socket
+
+- name: Create gunicorn override dir
+  file:
+    path: /etc/systemd/system/gunicorn.service.d
+    state: directory
+
+- name: Gunicorn environment
+  template:
+    src: env.conf
+    dest: /etc/systemd/system/gunicorn.service.d/env.conf
+
+- name: Enable gunicorn in systemd
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: gunicorn.service
+    state: restarted

@@ -1,0 +1,20 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+PIDFile={{ gunicorn_pid }}
+User=www-data
+Group=www-data
+WorkingDirectory={{ app_dir }}
+RuntimeDirectory=gunicorn
+ExecStart={{ venv_dir }}/bin/gunicorn --pid {{ gunicorn_pid }} \
+          --bind unix:{{ gunicorn_socket }} confsched.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+Environment=DJANGO_SETTINGS_MODULE=confsched.settings.prod
+
+[Install]
+WantedBy=multi-user.target

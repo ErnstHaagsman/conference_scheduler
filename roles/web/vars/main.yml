@@ -1,0 +1,9 @@
+app_dir: /opt/confsched
+app_user: www-data
+venv_dir: /opt/venv
+gunicorn_pid: /run/gunicorn/gunicorn.pid
+gunicorn_socket: /run/gunicorn.sock
+email_host: localhost
+email_port: 25
+email_host_user: placeholder
+email_host_password: placeholder

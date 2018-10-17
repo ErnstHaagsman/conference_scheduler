@@ -2,8 +2,11 @@
 - name: Install web role on web hosts
   hosts: web
   become: yes
+  vars:
+    db_user: confschedapp
+    db_name: confsched
   vars_files:
     - secrets.yml
   roles:
-    - web
     - db
+    - web
