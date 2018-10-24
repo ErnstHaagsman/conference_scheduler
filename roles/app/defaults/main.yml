@@ -1,3 +1,4 @@
 instance_name: test
 host_name: test.confsched.ernsthaagsman.com
 django_hosts: "{{ host_name }}"
+deploy: yes

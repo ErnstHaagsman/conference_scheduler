@@ -9,8 +9,10 @@
         state: directory
 
     - name: Add active deployment fact
-      copy:
-        src: default_active.json
+      vars:
+        active_deployment: blue
+      template:
+        src: active.json
         dest: /etc/ansible/facts.d/active.fact
         force: no
       notify: Collect facts

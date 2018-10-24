@@ -1,0 +1,66 @@
+- name: Ensure blue/green file exists
+  hosts: web
+  become: yes
+  tasks:
+    - name: Create custom fact directory
+      file:
+        path: /etc/ansible/facts.d
+        state: directory
+
+    - name: Add active deployment fact
+      vars:
+        active_deployment: blue
+      template:
+        src: active.json
+        dest: /etc/ansible/facts.d/active.fact
+        force: no
+      notify: Collect facts
+  handlers:
+    - name: Collect facts
+      setup: ~
+
+- name: Configure active and inactive deployments
+  hosts: web
+  become: yes
+  tasks:
+    - name: Green was active, changing to blue
+      set_fact:
+        active_deployment: blue
+        inactive_deployment: green
+      when: ansible_local.active.active_deployment=="green"
+    - name: Blue was active, changing to green
+      set_fact:
+        active_deployment: green
+        inactive_deployment: blue
+      when: ansible_local.active.active_deployment=="blue"
+
+    - name: Load prod secrets
+      include_vars:
+        file: prod.secrets.yml
+
+    - name: Configuring active deployment
+      include_role:
+        name: app
+      vars:
+        deploy: no
+        db_user: confsched
+        db_name: confsched
+        host_name: confsched.ernsthaagsman.com
+        django_hosts: "staging.confsched.ernsthaagsman.com,confsched.ernsthaagsman.com"
+        instance_name: "{{ active_deployment }}"
+
+    - name: Configuring inactive deployment
+      include_role:
+        name: app
+      vars:
+        deploy: no
+        db_user: confsched
+        db_name: confsched
+        host_name: staging.confsched.ernsthaagsman.com
+        django_hosts: "staging.confsched.ernsthaagsman.com,confsched.ernsthaagsman.com"
+        instance_name: "{{ inactive_deployment }}"
+
+    - name: Update active deployment fact
+      template:
+        src: active.json
+        dest: /etc/ansible/facts.d/active.fact
