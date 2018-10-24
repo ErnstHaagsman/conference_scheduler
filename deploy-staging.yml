@@ -1,0 +1,47 @@
+---
+- name: Ensure blue/green file exists
+  hosts: web
+  become: yes
+  tasks:
+    - name: Create custom fact directory
+      file:
+        path: /etc/ansible/facts.d
+        state: directory
+
+    - name: Add active deployment fact
+      copy:
+        src: default_active.json
+        dest: /etc/ansible/facts.d/active.fact
+        force: no
+      notify: Collect facts
+  handlers:
+    - name: Collect facts
+      setup: ~
+
+- name: Set correct deployment target for staging
+  hosts: web
+  become: yes
+  tasks:
+    - name: Green is active, deploying staging to blue
+      set_fact:
+        inactive_deployment: blue
+      when: ansible_local.active.active_deployment=="green"
+    - name: Blue is active, deploying staging to green
+      set_fact:
+        inactive_deployment: green
+      when: ansible_local.active.active_deployment=="blue"
+
+- name: Push staging instance
+  hosts: web
+  become: yes
+  vars:
+    db_user: confsched
+    db_name: confsched
+    host_name: staging.confsched.ernsthaagsman.com
+    django_hosts: "staging.confsched.ernsthaagsman.com,confsched.ernsthaagsman.com"
+    instance_name: "{{ inactive_deployment }}"
+  vars_files:
+    - prod.secrets.yml
+  roles:
+    - db
+    - app
