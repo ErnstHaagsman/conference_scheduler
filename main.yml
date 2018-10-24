@@ -9,4 +9,4 @@
     - secrets.yml
   roles:
     - db
-    - web
+    - app

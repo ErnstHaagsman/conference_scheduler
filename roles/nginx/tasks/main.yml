@@ -1,0 +1,21 @@
+- name: Install nginx
+  apt:
+    state: present
+    name: nginx
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Configure nginx
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: Remove default site from sites-enabled
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Remove default site from sites-available
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent

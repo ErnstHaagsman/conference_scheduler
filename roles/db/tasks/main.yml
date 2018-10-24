@@ -1,20 +1,3 @@
-- name: Install PostgreSQL
-  apt:
-    name:
-      - postgresql
-      - libpq-dev
-      - python3-psycopg2
-    state: present
-    update_cache: yes
-    cache_valid_time: 3600
-
-- name: Configure pg_hba
-  copy:
-    src: pg_hba.conf
-    dest: /etc/postgresql/10/main/pg_hba.conf
-  notify:
-    - Reload postgres
-
 - name: Create DB user
   become: yes
   become_user: postgres
