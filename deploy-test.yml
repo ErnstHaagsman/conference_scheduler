@@ -1,0 +1,12 @@
+---
+- name: Install test instance
+  hosts: web
+  become: yes
+  vars:
+    db_user: confsched_test
+    db_name: confsched_test
+  vars_files:
+    - test.secrets.yml
+  roles:
+    - db
+    - app

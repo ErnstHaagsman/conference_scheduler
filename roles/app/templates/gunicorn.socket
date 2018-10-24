@@ -1,5 +1,5 @@
 [Unit]
-Description=gunicorn socket
+Description=gunicorn-{{ instance_name }} socket
 
 [Socket]
 ListenStream={{ gunicorn_socket }}

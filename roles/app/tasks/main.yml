@@ -49,41 +49,41 @@
 - name: Gunicorn service file
   template:
     src: gunicorn.service
-    dest: /etc/systemd/system/gunicorn.service
+    dest: "/etc/systemd/system/gunicorn-{{ instance_name }}.service"
 
 - name: Gunicorn socket file
   template:
     src: gunicorn.socket
-    dest: /etc/systemd/system/gunicorn.socket
+    dest: "/etc/systemd/system/gunicorn-{{ instance_name}}.socket"
 
 - name: Create gunicorn override dir
   file:
-    path: /etc/systemd/system/gunicorn.service.d
+    path: "/etc/systemd/system/gunicorn-{{ instance_name }}.service.d"
     state: directory
 
 - name: Gunicorn environment
   template:
     src: env.conf
-    dest: /etc/systemd/system/gunicorn.service.d/env.conf
+    dest: "/etc/systemd/system/gunicorn-{{ instance_name }}.service.d/env.conf"
 
 - name: Enable gunicorn in systemd
   systemd:
     daemon_reload: yes
     enabled: yes
-    name: gunicorn.service
+    name: "gunicorn-{{ instance_name }}.service"
     state: restarted
 
 - name: Template site-prod
   template:
     src: site-prod
-    dest: /etc/nginx/sites-available/site-prod
+    dest: "/etc/nginx/sites-available/site-{{ instance_name }}"
   notify:
     - Restart nginx
 
 - name: Enable site-prod
   file:
-    src: /etc/nginx/sites-available/site-prod
-    dest: /etc/nginx/sites-enabled/site-prod
+    src: "/etc/nginx/sites-available/site-{{ instance_name }}"
+    dest: "/etc/nginx/sites-enabled/site-{{ instance_name }}"
     state: link
   notify:
     - Restart nginx

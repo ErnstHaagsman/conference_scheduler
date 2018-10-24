@@ -28,7 +28,7 @@ upstream app_server {
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name confsched.ernsthaagsman.com;
+    server_name {{ host_name }};
 
     # SSL configuration
     #

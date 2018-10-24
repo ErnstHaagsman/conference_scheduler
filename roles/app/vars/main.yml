@@ -1,8 +1,8 @@
-app_dir: /opt/confsched
+app_dir: "/opt/confsched-{{ instance_name }}"
 app_user: www-data
-venv_dir: /opt/venv
-gunicorn_pid: /run/gunicorn/gunicorn.pid
-gunicorn_socket: /run/gunicorn.sock
+venv_dir: "/opt/venv-{{ instance_name }}"
+gunicorn_pid: "/run/gunicorn-{{ instance_name }}/gunicorn.pid"
+gunicorn_socket: "/run/gunicorn-{{ instance_name }}.sock"
 email_host: localhost
 email_port: 25
 email_host_user: placeholder

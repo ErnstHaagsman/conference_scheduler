@@ -1,6 +1,6 @@
 [Unit]
-Description=gunicorn daemon
-Requires=gunicorn.socket
+Description=gunicorn-{{ instance_name }} daemon
+Requires=gunicorn-{{ instance_name }}.socket
 After=network.target
 
 [Service]
@@ -8,7 +8,7 @@ PIDFile={{ gunicorn_pid }}
 User=www-data
 Group=www-data
 WorkingDirectory={{ app_dir }}
-RuntimeDirectory=gunicorn
+RuntimeDirectory=gunicorn-{{ instance_name }}
 ExecStart={{ venv_dir }}/bin/gunicorn --pid {{ gunicorn_pid }} \
           --bind unix:{{ gunicorn_socket }} confsched.wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
