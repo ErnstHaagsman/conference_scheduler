@@ -48,6 +48,6 @@
 - name: Copy backup script
   copy:
     src: upload_daily.sh
-    dest: /var/backups/backup_db.sh
+    dest: /var/backups/upload_daily.sh
     owner: "{{ backup_user }}"
     mode: 0500
