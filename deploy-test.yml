@@ -5,6 +5,7 @@
   vars:
     db_user: confsched_test
     db_name: confsched_test
+    backup: no
   vars_files:
     - test.secrets.yml
   roles:

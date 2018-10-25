@@ -9,8 +9,45 @@
     cache_valid_time: 3600
 
 - name: Configure pg_hba
-  copy:
+  template:
     src: pg_hba.conf
     dest: /etc/postgresql/10/main/pg_hba.conf
   notify:
     - Reload postgres
+
+- name: Install AWS CLI for s3 access
+  pip:
+    name: awscli
+    state: latest
+
+- name: Create backup role
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ backup_user }}"
+    role_attr_flags: "LOGIN"
+
+- name: Ensure backup user exists
+  user:
+    name: "{{ backup_user }}"
+    state: present
+
+- name: Create backup folder
+  file:
+    path: /var/backups/database
+    state: directory
+    owner: "{{ backup_user }}"
+
+- name: Copy backup script
+  copy:
+    src: backup_db.sh
+    dest: /var/backups/backup_db.sh
+    owner: "{{ backup_user }}"
+    mode: 0500
+
+- name: Copy backup script
+  copy:
+    src: upload_daily.sh
+    dest: /var/backups/backup_db.sh
+    owner: "{{ backup_user }}"
+    mode: 0500

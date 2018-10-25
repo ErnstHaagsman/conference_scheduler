@@ -29,6 +29,8 @@ resource "aws_instance" "web" {
     "${aws_security_group.web_sg.id}"
   ]
 
+  iam_instance_profile = "${aws_iam_instance_profile.web.name}"
+
   tags = {
     role = "web"
   }

@@ -1,0 +1,32 @@
+- name: Grant backup role table select privileges
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    database: "{{ db_name }}"
+    role: backup
+    privs: SELECT
+    objs: ALL_IN_SCHEMA
+
+- name: Grant backup role sequence select privileges
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    database: "{{ db_name }}"
+    role: backup
+    privs: SELECT
+    objs: ALL_IN_SCHEMA
+    type: sequence
+
+- name: Create cronjob for hourly backup
+  cron:
+    name: "Backup DB: {{ db_name }}"
+    special_time: hourly
+    job: "/var/backups/backup_db.sh {{ db_name }} {{ hourly_bucket }}"
+    user: backup
+
+- name: Create cronjob for daily backup
+  cron:
+    name: "Upload daily: {{ db_name }}"
+    special_time: daily
+    job: "/var/backups/upload_daily.sh {{ db_name }} {{ daily_bucket }}"
+    user: backup

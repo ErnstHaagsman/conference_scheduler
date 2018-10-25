@@ -1,3 +1,6 @@
 db_password: hunter2
 db_user: confschedapp
 db_name: confsched
+backup: yes
+hourly_bucket: confsched-hourly-backups
+daily_bucket: confsched-daily-backups

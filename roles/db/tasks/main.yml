@@ -11,3 +11,7 @@
   become_user: postgres
   postgresql_db:
     name: "{{ db_name }}"
+
+- name: Configure backups
+  include_tasks: backup.yml
+  when: backup
