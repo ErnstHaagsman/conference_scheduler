@@ -7,3 +7,4 @@ email_host: localhost
 email_port: 25
 email_host_user: placeholder
 email_host_password: placeholder
+static_root: "/var/www/{{ instance_name }}"

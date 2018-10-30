@@ -53,7 +53,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    root /var/www;
+    root {{ static_root }};
 
     location /static/ {
         # First attempt to serve request as file, then
