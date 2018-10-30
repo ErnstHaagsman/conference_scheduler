@@ -2,6 +2,15 @@
   include_tasks: deploy.yml
   when: deploy
 
+- name: Request SSL key
+  command:
+    cmd: >
+      certbot --nginx certonly
+      --non-interactive
+      --agree-tos -m {{ admin_email }}
+      --domain {{ host_name }}
+    creates: "/etc/letsencrypt/live/{{ host_name }}/fullchain.pem"
+
 - name: Template site-prod
   template:
     src: site-prod

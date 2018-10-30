@@ -1,7 +1,13 @@
-- name: Install nginx
+- name: Add PPA for certbot
+  apt_repository:
+    repo: ppa:certbot/certbot
+
+- name: Install nginx and certbot
   apt:
+    name:
+      - nginx
+      - python-certbot-nginx
     state: present
-    name: nginx
     update_cache: yes
     cache_valid_time: 3600
 
