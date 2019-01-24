@@ -21,7 +21,8 @@ resource "aws_key_pair" "key" {
 
 resource "aws_instance" "web" {
   ami = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
+  availability_zone = "${var.default_az}"
 
   key_name = "${aws_key_pair.key.key_name}"
 
@@ -34,6 +35,18 @@ resource "aws_instance" "web" {
   tags = {
     role = "web"
   }
+}
+
+resource "aws_ebs_volume" "db_volume" {
+  availability_zone = "${var.default_az}"
+  size = 4
+  type = "gp2"
+}
+
+resource "aws_volume_attachment" "db_att" {
+  device_name = "/dev/sdd"
+  volume_id = "${aws_ebs_volume.db_volume.id}"
+  instance_id = "${aws_instance.web.id}"
 }
 
 resource "aws_security_group" "web_sg" {

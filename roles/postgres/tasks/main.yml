@@ -1,3 +1,41 @@
+- name: Install nvme-cli for EBS volume identification
+  apt:
+    name: nvme-cli
+    update_cache: yes
+
+- name: Copy ebsnvme-id script
+  copy:
+    src: ebsnvme-id.py
+    dest: /usr/bin/ebsnvme-id
+    mode: 0755
+
+- name: Copy ebsnvme-nsid script
+  copy:
+    src: ec2nvme-nsid
+    dest: /usr/bin/ec2nvme-nsid
+    mode: 0755
+
+- name: Copy udev rules for EBS
+  copy:
+    src: 70-ec2-nvme-devices.rules
+    dest: /etc/udev/rules.d/70-ec2-nvme-devices.rules
+    mode: 0644
+  notify:
+    - udevadm trigger block devices
+
+- meta: flush_handlers
+
+- name: Ensure ext4 filesystem on database volume
+  filesystem:
+    dev: /dev/sdd
+    fstype: ext4
+
+- mount:
+    fstype: ext4
+    path: /var/lib/postgresql
+    src: /dev/sdd
+    state: mounted
+
 - name: Install PostgreSQL
   apt:
     name:
@@ -14,6 +52,11 @@
     dest: /etc/postgresql/10/main/pg_hba.conf
   notify:
     - Reload postgres
+
+- name: Make sure pip3 is installed
+  apt:
+    name: python3-pip
+    state: present
 
 - name: Install AWS CLI for s3 access
   pip:

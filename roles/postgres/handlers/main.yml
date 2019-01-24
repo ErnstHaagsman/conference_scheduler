@@ -1,3 +1,6 @@
+- name: udevadm trigger block devices
+  command: udevadm trigger --subsystem-match=block
+
 - name: Reload postgres
   service:
     name: postgresql
